@@ -26,8 +26,7 @@ def request_content(url):
 def perform_analysis(key='', sensitivity_ratio=0.3):
   # Request CSV from SQL table
   # Return error if the server responds with unexpected JSON data.
-  res = request_content(
-      'https://www.yquantify.com/csv/daily.csv?key=' + key)
+  res = request_content('https://www.yquantify.com/csv/daily.csv?key=' + key)
   if res[0] == '{':
     try:
       resObj = json.loads(res)
