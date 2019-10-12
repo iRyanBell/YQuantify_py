@@ -86,4 +86,4 @@ def perform_analysis(key=''):
     df_sen['weight_pred'] = weight_pred
     df_sen['sensitivity'] = np.array(weight_diff) * -1
 
-    return df_sen
+    return df_sen.to_json()
