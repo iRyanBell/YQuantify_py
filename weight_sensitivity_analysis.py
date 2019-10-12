@@ -47,60 +47,55 @@ for nan_i in nan_true:
 #  (Auto-Regressive Integrated Moving Average)
 ##############################################
 
+Y = df['weight']
 X = df.drop(['weight'], axis=1)
-y = df['weight']
 
-# Fit the model
-
-model = VAR(endog=df)
-model_fit = model.fit()
-
-# # Make prediction on validation.
-# prediction = model_fit.forecast(model_fit.y, steps=1)
+train = df[:-1]
+test = df[-1:]
 
 # # Make final predictions.
-# model = VAR(endog=train)
-# model_fit = model.fit()
-# yhat = model_fit.forecast(model_fit.y, steps=2)
+model = VAR(endog=train)
+model_fit = model.fit()
+yhat = model_fit.forecast(model_fit.y, steps=2)
 
 # ##############################################
 # # Sensitivity
 # ##############################################
 
 
-# def sensitivity(df, col_name, ratio, percentage=0.9):
-#     df_sen[col_name].iloc[-2] = df_sen[col_name].iloc[-2] * ratio
+def sensitivity(df, col_name, ratio, percentage=0.9):
+    df_sen[col_name].iloc[-2] = df_sen[col_name].iloc[-2] * ratio
 
-#     train = df_sen[:-1]
+    train = df_sen[:-1]
 
-#     model_sen = VAR(endog=train)
-#     model_sen_fit = model_sen.fit()
+    model_sen = VAR(endog=train)
+    model_sen_fit = model_sen.fit()
 
-#     # Make prediction on validation.
-#     yhat_sen_cal = model_sen_fit.forecast(model_sen_fit.y, steps=2)
-#     return yhat_sen_cal[:, 3][-1]
+    # Make prediction on validation.
+    yhat_sen_cal = model_sen_fit.forecast(model_sen_fit.y, steps=2)
+    return yhat_sen_cal[:, 3][-1]
 
 
-# col_names_sensitivity = {
-#     'sleep': 1+SENSITIVITY_RATIO,
-#     'exercise': 1+SENSITIVITY_RATIO,
-#     'calories': 1-SENSITIVITY_RATIO}
+col_names_sensitivity = {
+    'sleep': 1+SENSITIVITY_RATIO,
+    'exercise': 1+SENSITIVITY_RATIO,
+    'calories': 1-SENSITIVITY_RATIO}
 
-# weight_pred = []
-# weight_diff = []
-# for col_i, direction in col_names_sensitivity.items():
-#     df_sen = df.copy()
-#     res = sensitivity(df_sen, col_i, direction, percentage=0.1)
-#     weight_pred.append(res)
-#     weight_diff.append(yhat[1, 3] - res)
+weight_pred = []
+weight_diff = []
+for col_i, direction in col_names_sensitivity.items():
+    df_sen = df.copy()
+    res = sensitivity(df_sen, col_i, direction, percentage=0.1)
+    weight_pred.append(res)
+    weight_diff.append(yhat[1, 3] - res)
 
-# # #############################################
-# # Final result
-# # #############################################
-# df_sen = pd.DataFrame()
-# df_sen['attr'] = col_names_sensitivity.keys()
-# df_sen['weight_pred'] = weight_pred
-# df_sen['sensitivity'] = np.array(weight_diff) * -1
+# #############################################
+# Final result
+# #############################################
+df_sen = pd.DataFrame()
+df_sen['attr'] = col_names_sensitivity.keys()
+df_sen['weight_pred'] = weight_pred
+df_sen['sensitivity'] = np.array(weight_diff) * -1
 
-# print(df_sen.to_json())
-# sys.stdout.flush()
+print(df_sen.to_json())
+sys.stdout.flush()
