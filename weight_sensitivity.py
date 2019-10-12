@@ -26,10 +26,6 @@ def perform_analysis(key=''):
     df = df.copy()
     df = df[columns]
 
-    # Cast to
-    for column in columns:
-        df[column] = df[column].astype(float)
-
     ##############################################
     # Data manupulation for NAN value
     ##############################################
