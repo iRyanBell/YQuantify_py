@@ -6,14 +6,14 @@ import sys
 import warnings
 warnings.filterwarnings("ignore")
 
-# #############################################
+##############################################
 # Input parameters
-# #############################################
+##############################################
 SENSITIVITY_RATIO = 0.3
 
 
 def perform_analysis(key=''):
-    # Read CSV From SQL Table
+    # Read CSV from SQL table
     df = pd.read_csv('https://www.yquantify.com/csv/daily.csv?key=' + key)
 
     ##############################################
@@ -38,20 +38,20 @@ def perform_analysis(key=''):
         df[column_name] = s.interpolate(method='nearest')
 
     ##############################################
-    #  ARIMA
-    #  (Auto-Regressive Integrated Moving Average)
+    # ARIMA
+    # (Auto-Regressive Integrated Moving Average)
     ##############################################
 
     train = df[:-1]
 
-    # # Make final predictions.
+    # Make final predictions
     model = VAR(endog=train)
     model_fit = model.fit()
     yhat = model_fit.forecast(model_fit.y, steps=2)
 
-    # ##############################################
-    # # Sensitivity
-    # ##############################################
+    ##############################################
+    # Sensitivity
+    ##############################################
 
     def sensitivity(df, col_name, ratio, percentage=0.9):
         df_sen[col_name].iloc[-2] = df_sen[col_name].iloc[-2] * ratio
@@ -61,7 +61,7 @@ def perform_analysis(key=''):
         model_sen = VAR(endog=train)
         model_sen_fit = model_sen.fit()
 
-        # Make prediction on validation.
+        # Make prediction on validation
         yhat_sen_cal = model_sen_fit.forecast(model_sen_fit.y, steps=2)
         return yhat_sen_cal[:, 3][-1]
 
@@ -78,9 +78,9 @@ def perform_analysis(key=''):
         weight_pred.append(res)
         weight_diff.append(yhat[1, 3] - res)
 
-    # #############################################
+    ##############################################
     # Final result
-    # #############################################
+    ##############################################
     df_sen = pd.DataFrame()
     df_sen['attr'] = col_names_sensitivity.keys()
     df_sen['weight_pred'] = weight_pred
