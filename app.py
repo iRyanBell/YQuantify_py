@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-# import weight_sensitivity
+import weight_sensitivity
 
 app = Flask(__name__)
 
@@ -8,4 +8,5 @@ app = Flask(__name__)
 def weight_sensitivity_analysis():
     form_data = request.get_json()
     key = form_data['key']
-    return jsonify({'success': True, 'key': key})
+    analysis = weight_sensitivity.perform_analysis(key=key)
+    return jsonify({'result': analysis})
