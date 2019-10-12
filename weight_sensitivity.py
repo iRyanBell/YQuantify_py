@@ -3,6 +3,7 @@ import numpy as np
 import sys
 from statsmodels.tsa.vector_ar.var_model import VAR
 from urllib.request import urlopen
+from io import StringIO
 import json
 import sys
 import warnings
@@ -36,7 +37,7 @@ def perform_analysis(key='', sensitivity_ratio=0.3):
       return {'error': 'malformed-response'}
   # Parse CSV
   try:
-    df = pd.read_csv(res)
+    df = pd.read_csv(StringIO(res))
   except:
     return {'error': 'malformed-csv'}
 
