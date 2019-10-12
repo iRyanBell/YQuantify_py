@@ -6,5 +6,6 @@ app = Flask(__name__)
 
 @app.route('/weight/sensitivity', methods=['POST'])
 def weight_sensitivity_analysis():
-    key = request.form.get('key')
+    form_data = request.get_json()
+    key = form_data['key']
     return jsonify({'success': True, 'key': key})
