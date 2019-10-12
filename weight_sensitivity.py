@@ -14,6 +14,7 @@ warnings.filterwarnings("ignore")
 
 
 def request_content(url):
+  # Returns a utf-8 document from a url.
   with urlopen(url) as f:
     return f.read().decode('utf-8')
 
