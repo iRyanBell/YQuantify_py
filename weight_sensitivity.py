@@ -9,6 +9,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 ##############################################
+# Input parameters
+##############################################
+SENSITIVITY_RATIO = 0.3
+
+##############################################
 # Helper utilities
 ##############################################
 
@@ -17,11 +22,9 @@ def request_content(url):
   with urlopen(url) as f:
     return f.read().decode('utf-8')
 
-
 ##############################################
-# Input parameters
+# Weight Sensitivity Analysis
 ##############################################
-SENSITIVITY_RATIO = 0.3
 
 
 def perform_analysis(key=''):
@@ -43,7 +46,7 @@ def perform_analysis(key=''):
     return {'error': 'malformed-csv'}
 
   ##############################################
-  # DATA EXPLORATION
+  # Data exploration & preprocessing
   ##############################################
   df['date'] = pd.to_datetime(df['date'])
   df.set_index('date', inplace=True)
@@ -53,7 +56,7 @@ def perform_analysis(key=''):
   df = df[columns]
 
   ##############################################
-  # Data manupulation for NAN value
+  # Data manupulation for NaN value
   ##############################################
   nan_columns = df.isnull().any()
   nan_true = [i for i, col_i in enumerate(nan_columns) if col_i == True]
