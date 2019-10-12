@@ -9,11 +9,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 ##############################################
-# Input parameters
-##############################################
-SENSITIVITY_RATIO = 0.3
-
-##############################################
 # Helper utilities
 ##############################################
 
@@ -27,7 +22,7 @@ def request_content(url):
 ##############################################
 
 
-def perform_analysis(key=''):
+def perform_analysis(key='', sensitivity_ratio=0.3):
   # Request CSV from SQL table
   # Return error if the server responds with unexpected JSON data.
   res = request_content(
@@ -95,9 +90,9 @@ def perform_analysis(key=''):
     return yhat_sen_cal[:, 3][-1]
 
   col_names_sensitivity = {
-      'sleep': 1+SENSITIVITY_RATIO,
-      'exercise': 1+SENSITIVITY_RATIO,
-      'calories': 1-SENSITIVITY_RATIO}
+      'sleep': 1+sensitivity_ratio,
+      'exercise': 1+sensitivity_ratio,
+      'calories': 1-sensitivity_ratio}
 
   weight_pred = []
   weight_diff = []
