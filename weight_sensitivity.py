@@ -2,9 +2,21 @@ import pandas as pd
 import numpy as np
 import sys
 from statsmodels.tsa.vector_ar.var_model import VAR
+from urllib.request import urlopen
+import json
 import sys
 import warnings
 warnings.filterwarnings("ignore")
+
+##############################################
+# Helper utilities
+##############################################
+
+
+def request_content(url):
+  with urlopen(url) as f:
+    return f.read().decode('utf-8')
+
 
 ##############################################
 # Input parameters
@@ -13,11 +25,22 @@ SENSITIVITY_RATIO = 0.3
 
 
 def perform_analysis(key=''):
-  # Read CSV from SQL table
+  # Request CSV from SQL table
+  # Return error if the server responds with unexpected JSON data.
+  res = request_content(
+      'https://www.yquantify.com/csv/daily.csv?key=' + key)
+  if res[0] == '{':
+    try:
+      resObj = json.loads(res)
+      if 'error' in resObj:
+        return {'error': resObj['error']}
+    except:
+      return {'error': 'malformed-response'}
+  # Parse CSV
   try:
-    df = pd.read_csv('https://www.yquantify.com/csv/daily.csv?key=' + key)
+    df = pd.read_csv(res)
   except:
-    return {'error': 'csv'}
+    return {'error': 'malformed-csv'}
 
   ##############################################
   # DATA EXPLORATION
