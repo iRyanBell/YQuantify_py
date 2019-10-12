@@ -69,8 +69,11 @@ def perform_analysis(key='', sensitivity_ratio=0.3):
   train = df[:-1]
 
   # Make final predictions
-  model = VAR(endog=train)
-  model_fit = model.fit()
+  try:
+    model = VAR(endog=train)
+    model_fit = model.fit()
+  except:
+    return {'error': 'insufficient-data'}
   yhat = model_fit.forecast(model_fit.y, steps=2)
 
   ##############################################
