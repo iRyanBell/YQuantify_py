@@ -14,7 +14,10 @@ SENSITIVITY_RATIO = 0.3
 
 def perform_analysis(key=''):
     # Read CSV from SQL table
-    df = pd.read_csv('https://www.yquantify.com/csv/daily.csv?key=' + key)
+    try:
+        df = pd.read_csv('https://www.yquantify.com/csv/daily.csv?key=' + key)
+    except:
+        return {'error': 'csv'}
 
     ##############################################
     # DATA EXPLORATION
