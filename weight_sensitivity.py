@@ -24,8 +24,8 @@ def request_document(url):
 
 
 def perform_analysis(key='', sensitivity_ratio=0.3):
-  # Request CSV from SQL table
-  # Return error if the server responds with unexpected JSON data.
+  # Requests a CSV document from the SQL table
+  # Returns an error if the server responds with unexpected JSON data.
   res = request_document('https://www.yquantify.com/csv/daily.csv?key=' + key)
   if res[0] == '{':
     try:
