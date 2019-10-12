@@ -9,4 +9,4 @@ def weight_sensitivity_analysis():
     form_data = request.get_json()
     key = form_data['key']
     analysis = weight_sensitivity.perform_analysis(key=key)
-    return jsonify({'result': analysis})
+    return jsonify({'results': analysis})
