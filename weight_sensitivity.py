@@ -86,4 +86,8 @@ def perform_analysis(key=''):
     df_sen['weight_pred'] = weight_pred
     df_sen['sensitivity'] = np.array(weight_diff) * -1
 
-    return df_sen.to_dict()
+    results = {}
+    for idx, attr in enumerate(df_sen['attr']):
+        results[attr] = df_sen['sensitivity'][idx]
+
+    return results
